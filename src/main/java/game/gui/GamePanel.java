@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 
 public class GamePanel extends JPanel implements MouseListener {
 
@@ -17,6 +18,10 @@ public class GamePanel extends JPanel implements MouseListener {
     private boolean repaint = false;
 
     private Field field_1;
+
+    private Line2D slashLine;
+
+    private boolean gameOver = false;
 
     public GamePanel(){
         super();
@@ -32,7 +37,61 @@ public class GamePanel extends JPanel implements MouseListener {
     public void setFields(Field[] fields) {
         this.repaint = true;
         this.fields = fields;
+        checkWin();
         repaint();
+    }
+
+    public void resetGame(){
+        this.slashLine = null;
+        this.repaint = false;
+        for(Field f : fields) {
+            if(f!=null) {
+                f.setSymbol_O(false);
+                f.setSymbol_X(false);
+            }
+        }
+        fields = new Field[9];
+        repaint();
+        JOptionPane.showMessageDialog(this, "GAME OVER !");
+        gameOver = false;
+    }
+
+    public void checkWin(){
+
+        //upright
+        checkStrike(0, 3, 6, new Line2D.Double(100, 0, 100, 580));
+        checkStrike(1, 4, 7, new Line2D.Double(300, 0, 300, 580));
+        checkStrike(2, 5, 8, new Line2D.Double(500, 0, 500, 580));
+
+        //horizontally
+        checkStrike(0, 1, 2, new Line2D.Double(0, 90, 600, 90));
+        checkStrike(3, 4, 5, new Line2D.Double(0, 270, 600, 270));
+        checkStrike(6, 7, 8, new Line2D.Double(0, 450, 600, 450));
+
+        //slant
+        checkStrike(0, 4, 8, new Line2D.Double(0, 0, 600, 555));
+        checkStrike(2, 4, 6, new Line2D.Double(585, 0, 0, 545));
+
+
+    }
+
+    public boolean checkNoMovesEnd(){
+        for (Field f : fields)
+            if(f==null)
+                return false;
+        return true;
+    }
+
+    private void checkStrike(int i, int i2, int i3, Line2D line2D) {
+        if (fields[i] != null && fields[i2] != null && fields[i3] != null) {
+            if (fields[i].isSymbol_O() && fields[i2].isSymbol_O() && fields[i3].isSymbol_O()) {
+                this.slashLine = line2D;
+                gameOver = true;
+            } else if (fields[i].isSymbol_X() && fields[i2].isSymbol_X() && fields[i3].isSymbol_X()) {
+                this.slashLine = line2D;
+                gameOver = true;
+            }
+        }
     }
 
     public void setupChain(){
@@ -91,6 +150,10 @@ public class GamePanel extends JPanel implements MouseListener {
                     this.symbol = Symbol.X;
             }
         }
+        if(slashLine != null){
+            g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
+            g2d.draw(this.slashLine);
+        }
     }
 
     @Override
@@ -100,7 +163,12 @@ public class GamePanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        field_1.process(e.getX(), e.getY(), this.symbol);
+        if(gameOver)
+            resetGame();
+        else if(checkNoMovesEnd())
+            resetGame();
+        else
+            field_1.process(e.getX(), e.getY(), this.symbol);
     }
 
     @Override

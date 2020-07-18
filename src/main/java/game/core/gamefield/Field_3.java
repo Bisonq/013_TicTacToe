@@ -5,11 +5,11 @@ import game.gui.GamePanel;
 
 import java.awt.*;
 
-public class Field_3 extends Field{
+public class Field_3 extends Field {
 
     private GamePanel panel;
 
-    public Field_3(GamePanel panel){
+    public Field_3(GamePanel panel) {
         setCenterPoint(new Point(500, 90));
         setSymbol_O(false);
         setSymbol_X(false);
@@ -18,22 +18,22 @@ public class Field_3 extends Field{
 
     @Override
     public void process(int x, int y, Symbol symbol) {
-        if(x > 405 && y < 175){
+        if (x > 405 && y < 175) {
             Field[] fields = panel.getFields();
-            if(symbol.toString().equals("X")){
-                if(fields[2] == null) {
+            if (symbol.toString().equals("X")) {
+                if (fields[2] == null) {
                     setSymbol_X(true);
                     fields[2] = this;
                     panel.setFields(fields);
                 }
-            }else{
-                if(fields[2] == null) {
+            } else {
+                if (fields[2] == null) {
                     setSymbol_O(true);
                     fields[2] = this;
                     panel.setFields(fields);
                 }
             }
-        }else{
+        } else {
             getNextFieldInChain().process(x, y, symbol);
         }
     }

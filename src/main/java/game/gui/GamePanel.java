@@ -1,6 +1,6 @@
 package game.gui;
 
-import game.core.*;
+import game.core.Symbol;
 import game.core.gamefield.*;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements MouseListener {
 
     private boolean gameOver = false;
 
-    public GamePanel(){
+    public GamePanel() {
         super();
         addMouseListener(this);
         this.fields = new Field[9];
@@ -41,11 +41,11 @@ public class GamePanel extends JPanel implements MouseListener {
         repaint();
     }
 
-    public void resetGame(){
+    public void resetGame() {
         this.slashLine = null;
         this.repaint = false;
-        for(Field f : fields) {
-            if(f!=null) {
+        for (Field f : fields) {
+            if (f != null) {
                 f.setSymbol_O(false);
                 f.setSymbol_X(false);
             }
@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements MouseListener {
         gameOver = false;
     }
 
-    public void checkWin(){
+    public void checkWin() {
 
         //upright
         checkStrike(0, 3, 6, new Line2D.Double(100, 0, 100, 580));
@@ -75,9 +75,9 @@ public class GamePanel extends JPanel implements MouseListener {
 
     }
 
-    public boolean checkNoMovesEnd(){
+    public boolean checkNoMovesEnd() {
         for (Field f : fields)
-            if(f==null)
+            if (f == null)
                 return false;
         return true;
     }
@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements MouseListener {
         }
     }
 
-    public void setupChain(){
+    public void setupChain() {
         this.field_1 = new Field_1(this);
         Field field_2 = new Field_2(this);
         Field field_3 = new Field_3(this);
@@ -122,13 +122,13 @@ public class GamePanel extends JPanel implements MouseListener {
 
         g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
 
-        g2d.drawLine(200,0, 200, 600);
-        g2d.drawLine(400,0, 400, 600);
+        g2d.drawLine(200, 0, 200, 600);
+        g2d.drawLine(400, 0, 400, 600);
 
         g2d.drawLine(0, 180, 600, 180);
-        g2d.drawLine(0,360, 600, 360);
+        g2d.drawLine(0, 360, 600, 360);
 
-        if(repaint) {
+        if (repaint) {
             for (Field f : fields) {
                 if (f != null) {
                     int centerXPoint = (int) f.getCenterPoint().getX();
@@ -150,7 +150,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     this.symbol = Symbol.X;
             }
         }
-        if(slashLine != null){
+        if (slashLine != null) {
             g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
             g2d.draw(this.slashLine);
         }
@@ -163,9 +163,9 @@ public class GamePanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(gameOver)
+        if (gameOver)
             resetGame();
-        else if(checkNoMovesEnd())
+        else if (checkNoMovesEnd())
             resetGame();
         else
             field_1.process(e.getX(), e.getY(), this.symbol);

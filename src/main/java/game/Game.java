@@ -7,13 +7,14 @@ public class Game {
 
     private static final Game game = new Game();
 
-    private Game(){}
+    private Game() {
+    }
 
-    public static Game getInstance(){
+    public static Game getInstance() {
         return game;
     }
 
-    public void startGame(){
+    public void startGame() {
         Frame frame = new Frame(new GamePanel());
     }
 }

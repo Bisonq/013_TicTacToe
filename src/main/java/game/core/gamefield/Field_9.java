@@ -1,15 +1,16 @@
-package game.core;
+package game.core.gamefield;
 
+import game.core.Symbol;
 import game.gui.GamePanel;
 
 import java.awt.*;
 
-public class Field_2 extends Field{
+public class Field_9 extends Field{
 
     private GamePanel panel;
 
-    public Field_2(GamePanel panel){
-        setCenterPoint(new Point(300, 90));
+    public Field_9(GamePanel panel){
+        setCenterPoint(new Point(500, 450));
         setSymbol_O(false);
         setSymbol_X(false);
         this.panel = panel;
@@ -17,23 +18,21 @@ public class Field_2 extends Field{
 
     @Override
     public void process(int x, int y, Symbol symbol) {
-        if(x > 205 && x < 395 && y < 175){
+        if(x > 405 && y >365){
             Field[] fields = panel.getFields();
             if(symbol.toString().equals("X")){
-                if(fields[1] == null) {
+                if(fields[8] == null) {
                     setSymbol_X(true);
-                    fields[1] = this;
+                    fields[8] = this;
+                    panel.setFields(fields);
                 }
-                panel.setFields(fields);
             }else{
-                if(fields[1] == null) {
+                if(fields[8] == null) {
                     setSymbol_O(true);
-                    fields[1] = this;
+                    fields[8] = this;
                     panel.setFields(fields);
                 }
             }
-        }else{
-            getNextFieldInChain().process(x, y, symbol);
         }
     }
 }

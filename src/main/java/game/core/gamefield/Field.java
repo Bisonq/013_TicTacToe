@@ -1,4 +1,6 @@
-package game.core;
+package game.core.gamefield;
+
+import game.core.Symbol;
 
 import java.awt.*;
 
